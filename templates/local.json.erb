@@ -1,0 +1,51 @@
+{
+  "storage.upload-size-limit": "10M",
+  "config.ignore-issues": {
+    "daemons.need-restarting": true,
+    "security.security.alternate-file-domain": true
+  },
+  "pygments.enabled": true,
+  "repository.default-local-path": "/var/lib/git",
+  "phabricator.serious-business": true,
+  "phabricator.base-uri": "https://<%= @vhost_name %>",
+  "phabricator.uninstalled-applications": {
+    "PhabricatorDifferentialApplication": true,
+    "PhabricatorPhrictionApplication": true,
+    "PhabricatorDiffusionApplication": true,
+    "PhabricatorConpherenceApplication": true,
+    "PhabricatorAuditApplication": true,
+    "PhabricatorTokensApplication": true,
+    "PhabricatorLegalpadApplication": true
+  },
+  "maniphest.statuses": {
+    "open": {
+      "name": "Open",
+      "special": "default"
+    },
+    "inprogress": {
+      "name": "In Progress"
+    },
+    "review": {
+      "name": "In Review"
+    },
+    "merged": {
+      "name": "Merged",
+      "name.full": "Closed, Merged",
+      "closed": true,
+      "special": "closed"
+    },
+    "invalid": {
+      "name": "Invalid",
+      "name.full": "Closed, Invalid",
+      "closed": true
+    },
+    "duplicate": {
+      "name": "Duplicate",
+      "name.full": "Closed, Duplicate",
+      "transaction.icon": "fa-times",
+      "special": "duplicate",
+      "closed": true
+    }
+  },
+  "phabricator.timezone": "UTC"
+}
