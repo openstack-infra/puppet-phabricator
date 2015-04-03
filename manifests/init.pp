@@ -2,7 +2,7 @@
 #
 class phabricator (
   $vhost_name           = $::fqdn,
-  $phab_dir             = "/phabricator",
+  $phab_dir             = '/phabricator',
   $instance             = 'dev',
   $mysql_host           = 'localhost',
   $mysql_port           = 3306,
@@ -17,17 +17,17 @@ class phabricator (
   $ssl_chain_file_contents = '' # If left empty puppet will not create file.
 ) {
 
-  $instances_dir = "${phab_dir}/instances",
-  $instance_dir = "${instances_dir}/${instance}"",
+  $instances_dir = "${phab_dir}/instances"
+  $instance_dir = "${instances_dir}/${instance}"
 
   $packages = [
-    "php5",
-    "php5-mysql",
-    "php5-gd",
-    "php5-dev",
-    "php5-curl",
-    "php-apc",
-    "php5-cli"
+    'php5',
+    'php5-mysql',
+    'php5-gd',
+    'php5-dev',
+    'php5-curl',
+    'php-apc',
+    'php5-cli'
   ]
   package { $packages:
     ensure => installed,
@@ -82,8 +82,7 @@ class phabricator (
   vcsrepo { "${instance_dir}/phabricator":
     ensure   => latest,
     provider => git,
-    revision => $commit,
-    source   => "https://github.com/phacility/phabricator.git",
+    source   => 'https://github.com/phacility/phabricator.git',
     require  => [
       File[$instance_dir],
       Package['git'],
@@ -93,8 +92,7 @@ class phabricator (
   vcsrepo { "${instance_dir}/arcanist":
     ensure   => latest,
     provider => git,
-    revision => $commit,
-    source   => "https://github.com/phacility/arcanist.git",
+    source   => 'https://github.com/phacility/arcanist.git',
     require  => [
       File[$instance_dir],
       Package['git'],
@@ -104,38 +102,37 @@ class phabricator (
   vcsrepo { "${instance_dir}/libphutil":
     ensure   => latest,
     provider => git,
-    revision => $commit,
-    source   => "https://github.com/phacility/libphutil.git",
+    source   => 'https://github.com/phacility/libphutil.git',
     require  => [
       File[$instance_dir],
       Package['git'],
     ]
   }
 
-  file { "initial.db":
-    path   => "${phab_dir}/initial.db",
-    source => "puppet:///modules/phabricator/initial.db",
+  file { 'initial.db':
     ensure => present,
+    path   => "${phab_dir}/initial.db",
+    source => 'puppet:///modules/phabricator/initial.db',
   }
 
   file {'local.json':
-    path    => "${instance_dir}/phabricator/conf/local/local.json",
-    content => template("phabricator/local.json.erb"),
     ensure  => present,
+    path    => "${instance_dir}/phabricator/conf/local/local.json",
+    content => template('phabricator/local.json.erb'),
   }
 
-  exec { "load-initial-db":
-    command => "mysql < ${phab_dir}/initial.db && ${instance_dir}/phabricator/bin/storage upgrade --force",
-    unless     => "${instance_dir}/phabricator/bin/storage status",
-    subscribe  => File["initial.db"],
+  exec { 'load-initial-db':
+    command     => "/usr/bin/mysql < ${phab_dir}/initial.db && ${instance_dir}/phabricator/bin/storage upgrade --force",
+    unless      => "${instance_dir}/phabricator/bin/storage status",
+    subscribe   => File['initial.db'],
     refreshonly => true,
-    require => [
-      Vcsrepo["$instance_dir/phabricator"],
-      File["initial.db"],
-    ]
+    require     => [
+                    Vcsrepo["${instance_dir}/phabricator"],
+                    File['initial.db'],
+                    ]
   }
 
-  exec { "update-database":
+  exec { 'update-database':
     command     => "${instance_dir}/phabricator/bin/storage upgrade --force",
     refreshonly => true,
     subscribe   => Vcsrepo["${instance_dir}/phabricator"],
@@ -143,16 +140,20 @@ class phabricator (
   }
 
   include apache
+  include apache::ssl
+  include apache::php
+
   a2mod { 'rewrite':
     ensure => present,
   }
 
   apache::vhost { $vhost_name:
     port     => 443,
-    docroot  => "${instance_dir}/phabricator/webroot",
+    docroot  => "${instance_dir}/phabricator/webroot/",
     priority => '50',
-    template => "phabricator/vhost.erb",
+    template => 'phabricator/vhost.erb',
     ssl      => true,
+    require  => File[$instance_dir],
   }
 
 }
