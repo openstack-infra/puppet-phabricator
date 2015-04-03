@@ -11,7 +11,7 @@
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny
-        allow from all
+        Allow from all
     </Directory>
 
     RewriteEngine on
@@ -49,7 +49,8 @@
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny
-        allow from all
+        Allow from all
+        Require all granted
     </Directory>
 
     RewriteEngine on

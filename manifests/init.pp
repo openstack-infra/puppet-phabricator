@@ -140,16 +140,20 @@ class phabricator (
   }
 
   include apache
+  include apache::ssl
+  include apache::php
+
   a2mod { 'rewrite':
     ensure => present,
   }
 
   apache::vhost { $vhost_name:
     port     => 443,
-    docroot  => "${instance_dir}/phabricator/webroot",
+    docroot  => "${instance_dir}/phabricator/webroot/",
     priority => '50',
     template => 'phabricator/vhost.erb',
     ssl      => true,
+    require  => File[$instance_dir],
   }
 
 }
