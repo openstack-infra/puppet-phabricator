@@ -121,6 +121,20 @@ class phabricator (
     content => template('phabricator/local.json.erb'),
   }
 
+  file { '/etc/php5/mods-available/phabricator.ini':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    content => "; configuration for phabricator\n; priority=20\npost_max_size = 32M",
+
+  }
+
+  file { '/etc/php5/apache2/conf.d/20-phabricator.ini':
+    ensure  => 'link',
+    target  => '/etc/php5/mods-available/phabricator.ini',
+    notify  => Service['apache2'],
+  }
+
   exec { 'load-initial-db':
     command     => "/usr/bin/mysql < ${phab_dir}/initial.db && ${instance_dir}/phabricator/bin/storage upgrade --force",
     unless      => "${instance_dir}/phabricator/bin/storage status",
