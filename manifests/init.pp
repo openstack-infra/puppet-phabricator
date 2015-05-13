@@ -27,7 +27,8 @@ class phabricator (
     'php5-dev',
     'php5-curl',
     'php-apc',
-    'php5-cli'
+    'php5-cli',
+    'python-pygmentize'
   ]
   package { $packages:
     ensure => installed,
