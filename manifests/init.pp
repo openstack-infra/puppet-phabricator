@@ -56,7 +56,7 @@ class phabricator (
       group   => 'root',
       mode    => '0640',
       content => $ssl_cert_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 
@@ -66,7 +66,7 @@ class phabricator (
       group   => 'ssl-cert',
       mode    => '0640',
       content => $ssl_key_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 
@@ -76,7 +76,7 @@ class phabricator (
       group   => 'root',
       mode    => '0640',
       content => $ssl_chain_file_contents,
-      before  => Apache::Vhost[$vhost_name],
+      before  => Httpd::Vhost[$vhost_name],
     }
   }
 
@@ -133,7 +133,7 @@ class phabricator (
   file { '/etc/php5/apache2/conf.d/20-phabricator.ini':
     ensure  => 'link',
     target  => '/etc/php5/mods-available/phabricator.ini',
-    notify  => Service['apache2'],
+    notify  => Service['httpd'],
   }
 
   exec { 'load-initial-db':
@@ -154,15 +154,15 @@ class phabricator (
     require     => Vcsrepo["${instance_dir}/phabricator"],
   }
 
-  include apache
-  include apache::ssl
-  include apache::php
+  include ::httpd
+  include ::httpd::ssl
+  include ::httpd::php
 
-  a2mod { 'rewrite':
+  httpd_mod { 'rewrite':
     ensure => present,
   }
 
-  apache::vhost { $vhost_name:
+  httpd::vhost { $vhost_name:
     port     => 443,
     docroot  => "${instance_dir}/phabricator/webroot/",
     priority => '50',
