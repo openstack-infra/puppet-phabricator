@@ -11,10 +11,10 @@ class phabricator (
   $mysql_user_password,
   $ssl_cert_file = "/etc/ssl/certs/${::fqdn}.pem",
   $ssl_key_file = "/etc/ssl/private/${::fqdn}.key",
-  $ssl_chain_file = '',
-  $ssl_cert_file_contents = '', # If left empty puppet will not create file.
-  $ssl_key_file_contents = '',  # If left empty puppet will not create file.
-  $ssl_chain_file_contents = '' # If left empty puppet will not create file.
+  $ssl_chain_file = undef,
+  $ssl_cert_file_contents = undef, # If left empty puppet will not create file.
+  $ssl_key_file_contents = undef,  # If left empty puppet will not create file.
+  $ssl_chain_file_contents = undef # If left empty puppet will not create file.
 ) {
 
   $instances_dir = "${phab_dir}/instances"
@@ -50,7 +50,7 @@ class phabricator (
     ensure => directory,
   }
 
-  if $ssl_cert_file_contents != '' {
+  if $ssl_cert_file_contents != undef {
     file { $ssl_cert_file:
       owner   => 'root',
       group   => 'root',
@@ -60,7 +60,7 @@ class phabricator (
     }
   }
 
-  if $ssl_key_file_contents != '' {
+  if $ssl_key_file_contents != undef {
     file { $ssl_key_file:
       owner   => 'root',
       group   => 'ssl-cert',
@@ -70,7 +70,7 @@ class phabricator (
     }
   }
 
-  if $ssl_chain_file_contents != '' {
+  if $ssl_chain_file_contents != undef {
     file { $ssl_chain_file:
       owner   => 'root',
       group   => 'root',
@@ -131,9 +131,9 @@ class phabricator (
   }
 
   file { '/etc/php5/apache2/conf.d/20-phabricator.ini':
-    ensure  => 'link',
-    target  => '/etc/php5/mods-available/phabricator.ini',
-    notify  => Service['httpd'],
+    ensure => 'link',
+    target => '/etc/php5/mods-available/phabricator.ini',
+    notify => Service['httpd'],
   }
 
   exec { 'load-initial-db':

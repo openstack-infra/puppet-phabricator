@@ -36,7 +36,9 @@
     SSLProtocol All -SSLv2 -SSLv3
     SSLCertificateFile      <%= scope.lookupvar("phabricator::ssl_cert_file") %>
     SSLCertificateKeyFile   <%= scope.lookupvar("phabricator::ssl_key_file") %>
-    <% if scope.lookupvar("phabricator::ssl_chain_file") != "" %>
+    <%# scope.lookupvar returns nil for an undefined variable in puppet 4 -%>
+    <%# scope.lookupvar returns :undef for an undefined variable in puppet 3 -%>
+    <% unless ['', nil, :undef].include?(scope.lookupvar("phabricator::ssl_chain_file")) %>
     SSLCertificateChainFile <%= scope.lookupvar("phabricator::ssl_chain_file") %>
     <% end %>
 

@@ -22,10 +22,10 @@ class phabricator::mysql(
 
     class { '::mysql::server':
       config_hash => {
-        'root_password'           => $mysql_root_password,
-        'default_engine'          => 'InnoDB',
-        'bind_address'            => $mysql_bind_address,
-        'port'                    => $mysql_port,
+        'root_password'  => $mysql_root_password,
+        'default_engine' => 'InnoDB',
+        'bind_address'   => $mysql_bind_address,
+        'port'           => $mysql_port,
         }
     }
 
