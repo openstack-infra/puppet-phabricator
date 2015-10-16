@@ -107,8 +107,8 @@ update stories, tasks
 -- There are a bunch of duplicate users in the storyboard db that are listed
 -- with @example.com email addresses. username is unique in phabricator
 update users
-  set username=concat(username, '_')
-  where email like '%example.com' and username not like '%_';
+  set id=concat(id, '_')
+  where email like '%example.com' and id not like '%_';
 
 
 -- Create temporary table that helps us sort stories with a single task
@@ -122,13 +122,13 @@ create table task_count
 alter table tasks
   modify column `priority` enum('low', 'medium', 'high', 'wishlist');
 update tasks set priority='wishlist' where priority is null;
-update tasks set status='todo' if status is NULL;
+update tasks set status='todo' where status is NULL;
 
 -- We're straight re-using the ids, so we need to make sure story and task ids
 -- don't conflict.
 -- Also, id's start with a T now, so we don't need to do as much to avoid
 -- overlap with launchpad ids
-alter table tasks drop constraint tasks_ibfk_4;
+alter table tasks drop foreign key tasks_ibfk_4;
 update stories set id = id+3000 where id < 3000;
 update tasks set story_id = story_id + 3000 where story_id < 3000;
 update events set story_id = story_id + 3000 where story_id < 3000;
@@ -145,18 +145,17 @@ insert into user
    select
      id,
      phid,
-     username,
-     if(full_name is NULL, username, full_name),
+     email,
+     if(full_name is NULL, email, full_name),
      NULL,
      NULL,
-   storyboard.make_cert(32),
-   '',
-    unix_timestamp(created_at),
-    if(updated_at is NULL, unix_timestamp(now()), unix_timestamp(updated_at)),
-    NULL, 0, 0, '', storyboard.make_cert(255),
-    0, 0, is_superuser, 'UTC', 1, 1,
-    storyboard.make_cert(64),
-    0
+     storyboard.make_cert(32),
+     '',
+     unix_timestamp(created_at),
+     if(updated_at is NULL, unix_timestamp(now()), unix_timestamp(updated_at)),
+     NULL, 0, 0, '', storyboard.make_cert(255),
+     0, 0, is_superuser, 'UTC',
+     0, 0, 1, 1, NULL, NULL, NULL, 1
    from storyboard.users;
 
 update user
@@ -221,7 +220,8 @@ insert into maniphest_task
     NULL,  -- originalEmailSource
     0, -- subpriority
     'users', -- viewPolicy
-    'users'  -- editPolicy
+    'users',  -- editPolicy
+    NULL -- spacePHID
   from storyboard.stories s, storyboard.tasks t, storyboard.task_count c
   where s.id = t.story_id and c.story_id=s.id and c.count = 1;
 
@@ -258,7 +258,8 @@ insert into maniphest_task
     NULL,
     0,
     'users',
-    'users'
+    'users',
+    NULL -- spacePHID
   from storyboard.stories s, storyboard.tasks t, storyboard.task_count c
   where s.id = t.story_id and c.story_id=s.id and c.count > 1;
 
@@ -284,7 +285,8 @@ insert into maniphest_task
     NULL,
     0,
     'users',
-    'users'
+    'users',
+    NULL -- spacePHID
   from storyboard.stories s, storyboard.task_count c, storyboard.users u
   where c.story_id=s.id and c.count > 1
    and u.id = s.creator_id;
@@ -400,7 +402,7 @@ create table task_subtask
 -- Grab a PHID to use as an author for the projects.
 -- TODO: Make a system/bot account that we can use as the "owner" of these
 -- projects. But I'll do for now.
-select phid into @author_phid from users where username='mordred';
+select phid into @author_phid from users where email='craige@mcwhirter.com.au';
 
 use phabricator_project
 
@@ -422,7 +424,8 @@ insert into project
     0,
     NULL,
     'fa-briefcase',
-    'blue'
+    'blue',
+    '12345678901234567890' -- mailKey
   from storyboard.projects;
 insert into project
   select
@@ -441,7 +444,9 @@ insert into project
     0,
     NULL,
     'fa-briefcase',
-    'blue'
+    'blue',
+    '12345678901234567890' -- mailKey
+  from storyboard.projects;
   from storyboard.project_groups;
 
 delete from project_slug;
