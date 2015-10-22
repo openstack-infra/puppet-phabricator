@@ -74,7 +74,7 @@ BEGIN
     SET str = md5(str);
     SET x = x + 1;
   END WHILE;
-  return str; 
+  return str;
 END //
 delimiter ;
 
@@ -143,19 +143,33 @@ delete from user_email;
 
 insert into user
    select
-     id,
-     phid,
-     email,
-     if(full_name is NULL, email, full_name),
-     NULL,
-     NULL,
-     storyboard.make_cert(32),
-     '',
-     unix_timestamp(created_at),
-     if(updated_at is NULL, unix_timestamp(now()), unix_timestamp(updated_at)),
-     NULL, 0, 0, '', storyboard.make_cert(255),
-     0, 0, is_superuser, 'UTC',
-     0, 0, 1, 1, NULL, NULL, NULL, 1
+     id as id,
+     phid as phid,
+     email as userName,
+     if(full_name is NULL, email, full_name) as realName,
+     NULL as sex,
+     NULL as translation,
+     storyboard.make_cert(32) as passwordSalt,
+     '' as passwordHash,
+     unix_timestamp(created_at) as dateCreated,
+     if(updated_at is NULL, unix_timestamp(now()), unix_timestamp(updated_at)) as dateModified,
+     NULL as profileImagePHID,
+     0 as consoleEnabled,
+     0 as consoleVisible,
+     '' as consoleTab,
+     storyboard.make_cert(255) as conduitCertificate,
+     0 as isSystemAgent,
+     0 as isDisabled,
+     is_superuser as isAdmin,
+     'UTC' as timezoneIdentifier,
+     0 as isEmailVerified,
+     1 as isApproved,
+     1 as accountSecret,
+     1 as isEnrolledInMultiFactor,
+     NULL as profileImageCache,
+     NULL as availabilityCache,
+     NULL as availabilityCacheTTL,
+     0 as isMailingList
    from storyboard.users;
 
 update user
@@ -177,7 +191,7 @@ use phabricator_maniphest
 -- priorities
 --  100 = Unbreak Now!
 --  90 = Needs Triage
---  80 = High     
+--  80 = High
 --  50 = Normal
 --  25 = Low
 --  0 = Wishlist
@@ -344,7 +358,7 @@ insert into maniphest_transaction_comment
     u.phid, -- author
     'public', -- viewPolicy
     u.phid, -- editPolicy
-    1, -- 
+    1, --
     if(c.content is NULL, '', c.content),
     '{"source":"web"}',
     if(c.is_active, false, true),
