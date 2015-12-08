@@ -55,6 +55,12 @@
         Require all granted
     </Directory>
 
+    <Location <%= @auth_location %> >
+      AuthType OpenID
+      require valid-user
+      AuthOpenIDSingleIdP <%= @AuthOpenIDSingleIdP %>
+    </Location>
+
     RewriteEngine on
     RewriteRule ^/rsrc/(.*)     -                       [L,QSA]
     RewriteRule ^/favicon.ico   -                       [L,QSA]
