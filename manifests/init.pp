@@ -1,20 +1,20 @@
 # == Class: phabricator
 #
 class phabricator (
-  $vhost_name           = $::fqdn,
-  $phab_dir             = '/phabricator',
-  $instance             = 'dev',
-  $mysql_host           = 'localhost',
-  $mysql_port           = 3306,
-  $mysql_database       = 'phabricator',
-  $mysql_user           = 'phabricator',
   $mysql_user_password,
-  $ssl_cert_file = "/etc/ssl/certs/${::fqdn}.pem",
-  $ssl_key_file = "/etc/ssl/private/${::fqdn}.key",
-  $ssl_chain_file = undef,
-  $ssl_cert_file_contents = undef, # If left empty puppet will not create file.
-  $ssl_key_file_contents = undef,  # If left empty puppet will not create file.
-  $ssl_chain_file_contents = undef # If left empty puppet will not create file.
+  $instance                = 'dev',
+  $mysql_database          = 'phabricator',
+  $mysql_host              = 'localhost',
+  $mysql_port              = 3306,
+  $mysql_user              = 'phabricator',
+  $phab_dir                = '/phabricator',
+  $ssl_cert_file           = "/etc/ssl/certs/${::fqdn}.pem",
+  $ssl_cert_file_contents  = undef, # If left empty puppet will not create file.
+  $ssl_chain_file          = undef,
+  $ssl_chain_file_contents = undef, # If left empty puppet will not create file.
+  $ssl_key_file            = "/etc/ssl/private/${::fqdn}.key",
+  $ssl_key_file_contents   = undef,  # If left empty puppet will not create file.
+  $vhost_name              = $::fqdn,
 ) {
 
   $instances_dir = "${phab_dir}/instances"

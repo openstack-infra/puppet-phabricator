@@ -17,7 +17,7 @@
 class phabricator::mysql(
   $mysql_root_password,
   $mysql_bind_address = '127.0.0.1',
-  $mysql_port = '3306'
+  $mysql_port         = '3306'
   ) {
 
     class { '::mysql::server':
