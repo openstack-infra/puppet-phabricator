@@ -1,12 +1,15 @@
 {
+  "mysql.pass": "<%= @mysql_user_password %>",
+  "mysql.user": "<%= @mysql_user %>",
+  "mysql.host": "<%= @mysql_host %>",
+  "mysql.port": "<%= @mysql_port %>",
   "config.ignore-issues": {
-    "daemons.need-restarting": true,
     "security.security.alternate-file-domain": true
   },
   "pygments.enabled": true,
-  "repository.default-local-path": "/var/lib/git",
+  "repository.default-local-path": "/opt/phabricator/repo",
   "phabricator.serious-business": true,
-  "phabricator.base-uri": "https://<%= @vhost_name %>",
+  "phabricator.base-uri": "https://<%= @httpd_vhost %>/",
   "phabricator.uninstalled-applications": {
     "PhabricatorDifferentialApplication": true,
     "PhabricatorPhrictionApplication": true,
@@ -46,5 +49,7 @@
       "closed": true
     }
   },
-  "phabricator.timezone": "UTC"
+  "phabricator.timezone": "UTC",
+  "auth.require-email-verification": false,
+  ""auth.require-approval": false
 }
