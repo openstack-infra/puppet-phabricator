@@ -1,0 +1,19 @@
+DELETE FROM phabricator_auth.auth_providerconfig;
+
+INSERT INTO phabricator_auth.auth_providerconfig
+  SELECT
+    1 as id,
+    "PHID-AUTH-7nztvra7ehvmx2xnmjgc" as phid,
+    "PhabricatorAuthProviderRemoteUser" as providerClass,
+    "RemoteUser" as providerType,
+    "self" as providerDomain,
+    1 as isEnabled,
+    1 as shouldAllowLogin,
+    1 as shouldAllowRegistration,
+    1 as shouldAllowLink,
+    1 as shouldAllowUnlink,
+    1 as shouldTrustEmails,
+    "[]" as properties,
+    1469712430 as dateCreated,
+    1469712430 as dateModified,
+    0 as shouldAutoLogin;
