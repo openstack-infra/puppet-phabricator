@@ -12,11 +12,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: phabricator
+# == Class: phabricator::vars
 #
-# Set up a full, standalone instance of phabricator.
+# Variables, and their defaults, shared between all the submodules. This
+# module is used as the source of all the shared default values.
 #
-class phabricator (
+class phabricator::vars (
   # Database Configurations.
   $mysql_database          = 'phabricator',
   $mysql_host              = 'localhost',
@@ -26,7 +27,7 @@ class phabricator (
   $mysql_root_password,
 
   # Phabricator working directory
-  $phabricator_dir         = '/opt/phabricator',
+  $phabricator_dir        = '/opt/phabricator',
 
   # SSL Certificates.
   $ssl_cert_file           = undef,
@@ -36,31 +37,11 @@ class phabricator (
   $ssl_key_file            = undef,
   $ssl_key_file_contents   = undef, # If left empty puppet will not create file.
 
-  # Httpd config.
+  # Virtual host config.
   $httpd_vhost             = $::fqdn,
   $httpd_admin_email       = 'noc@openstack.org',
 ) {
 
-  # Set up the shared configuration.
-  class { '::phabricator::vars':
-    mysql_database          => $mysql_database,
-    mysql_host              => $mysql_host,
-    mysql_port              => $mysql_port,
-    mysql_user              => $mysql_user,
-    mysql_user_password     => $mysql_user_password,
-    mysql_root_password     => $mysql_root_password,
-    phabricator_dir         => $phabricator_dir,
-    ssl_cert_file           => $ssl_cert_file,
-    ssl_cert_file_contents  => $ssl_cert_file_contents,
-    ssl_chain_file          => $ssl_chain_file,
-    ssl_chain_file_contents => $ssl_chain_file_contents,
-    ssl_key_file            => $ssl_key_file,
-    ssl_key_file_contents   => $ssl_key_file_contents,
-    httpd_vhost             => $httpd_vhost,
-    httpd_admin_email       => $httpd_admin_email,
-
-    before                  => [
-      Class['Phabricator::Certificates'],
-      Class['Phabricator::Httpd'],
-      Class['Phabricator::Mysql'],
-      Class['Phabricator::Install'],
+  # Non-configurable-options (derived)
+  $httpd_docroot           = "${phabricator_dir}/phabricator/webroot"
+}
