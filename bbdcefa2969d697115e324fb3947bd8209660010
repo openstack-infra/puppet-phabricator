@@ -1,0 +1,11 @@
+Code-Review+2: yolanda.robla <yroblamo@redhat.com>
+Code-Review+2: Joshua Hesketh <joshua.hesketh@rackspace.com>
+Code-Review+1: Jp Maxwell <jpmaxman@tipit.net>
+Code-Review+2: Jeremy Stanley <fungi@yuggoth.org>
+Workflow+1: Jeremy Stanley <fungi@yuggoth.org>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 12 Sep 2016 20:47:42 +0000
+Reviewed-on: https://review.openstack.org/350374
+Project: openstack-infra/puppet-phabricator
+Branch: refs/heads/master
