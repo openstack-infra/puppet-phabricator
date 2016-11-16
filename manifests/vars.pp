@@ -39,7 +39,7 @@ class phabricator::vars (
 
   # Virtual host config.
   $httpd_vhost             = $::fqdn,
-  $httpd_admin_email       = 'noc@openstack.org',
+  $httpd_admin_email       = "webmaster@${::fqdn}",
 ) {
 
   # Non-configurable-options (derived)

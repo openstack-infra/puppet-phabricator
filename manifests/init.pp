@@ -42,7 +42,7 @@ class phabricator (
 
   # Httpd config.
   $httpd_vhost             = $::fqdn,
-  $httpd_admin_email       = 'noc@openstack.org',
+  $httpd_admin_email       = "webmaster@${::fqdn}",
 ) {
 
   # Set up the shared configuration.

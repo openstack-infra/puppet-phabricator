@@ -17,11 +17,7 @@
 # Set up the virtual host for phabricator.
 #
 class phabricator::httpd (
-  $ssl_cert_file      = $phabricator::vars::ssl_cert_file,
-  $ssl_chain_file     = $phabricator::vars::ssl_chain_file,
-  $ssl_key_file       = $phabricator::vars::ssl_key_file,
   $httpd_vhost        = $phabricator::vars::httpd_vhost,
-  $httpd_admin_email  = $phabricator::vars::httpd_admin_email,
   $httpd_docroot      = $phabricator::vars::httpd_docroot,
 ) {
   include ::httpd
@@ -39,11 +35,12 @@ class phabricator::httpd (
   # Set up Phabricator as TLS.
   if defined(Class['phabricator::certificates']) {
     ::httpd::vhost { $httpd_vhost:
-      port     => 443,
-      docroot  => $httpd_docroot,
-      priority => '50',
-      template => 'phabricator/vhost.erb',
-      ssl      => true,
+      port       => 443, # Is required despite not being used.
+      docroot    => $httpd_docroot,
+      priority   => '50',
+      template   => 'phabricator/vhost.erb',
+      ssl        => true,
+      vhost_name => $httpd_vhost,
     }
   }
 }
