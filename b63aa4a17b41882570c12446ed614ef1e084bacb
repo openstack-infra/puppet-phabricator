@@ -1,0 +1,8 @@
+Code-Review+2: Ian Wienand <iwienand@redhat.com>
+Workflow+1: Ian Wienand <iwienand@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 16 Nov 2016 22:37:28 +0000
+Reviewed-on: https://review.openstack.org/398625
+Project: openstack-infra/puppet-phabricator
+Branch: refs/heads/master
