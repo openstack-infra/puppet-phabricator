@@ -26,10 +26,10 @@
   # only is guaranteed.
   SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!AES256:!aNULL:!eNULL:!MD5:!DSS:!PSK:!SRP
   SSLHonorCipherOrder on
-  SSLCertificateFile <%= scope['phabricator::certs::cert_file'] %>
-  SSLCertificateKeyFile <%= scope['phabricator::certs::key_file'] %>
-<% unless [nil, :undef].include?(scope['phabricator::certs::chain_file']) %>
-  SSLCertificateChainFile <%= scope['phabricator::certs::chain_file'] %>
+  SSLCertificateFile <%= scope['phabricator::certificates::cert_file'] %>
+  SSLCertificateKeyFile <%= scope['phabricator::certificates::key_file'] %>
+<% unless [nil, :undef].include?(scope['phabricator::certificates::chain_file']) %>
+  SSLCertificateChainFile <%= scope['phabricator::certificates::chain_file'] %>
 <% end %>
 
   DocumentRoot <%= @docroot %>
