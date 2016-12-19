@@ -169,7 +169,7 @@ class phabricator::install (
 
   exec { 'load-initial-db':
     command => "${phabricator_dir}/phabricator/bin/storage upgrade --force",
-    unless  => "${phabricator_dir}/phabricator/bin/storage status",
+    onlyif  => "${phabricator_dir}/phabricator/bin/storage status | grep -q 'Not Applied'",
     require => [
       Vcsrepo["${phabricator_dir}/phabricator"],
       Vcsrepo["${phabricator_dir}/libphutil"],
