@@ -19,12 +19,12 @@
 #
 class phabricator::vars (
   # Database Configurations.
+  $mysql_user_password,
+  $mysql_root_password,
   $mysql_database          = 'phabricator',
   $mysql_host              = 'localhost',
   $mysql_port              = 3306,
   $mysql_user              = 'phabricator',
-  $mysql_user_password,
-  $mysql_root_password,
 
   # Phabricator working directory
   $phabricator_dir        = '/opt/phabricator',
